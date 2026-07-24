@@ -11,9 +11,11 @@ function App() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState("");
 
-  const clearPasswordFields = () => {
+  const clearForm = () => {
+    setFullName("");
     setPassword("");
     setConfirmPassword("");
+    setAcceptTerms(false);
     setError("");
   };
 
@@ -55,16 +57,8 @@ function App() {
 
       alert("تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول");
 
-      // الانتقال إلى صفحة تسجيل الدخول
       setIsRegister(false);
-
-      // تنظيف بيانات التسجيل مع الاحتفاظ بالإيميل
-      setFullName("");
-      setPassword("");
-      setConfirmPassword("");
-      setAcceptTerms(false);
-      setError("");
-
+      clearForm();
       return;
     }
 
@@ -80,9 +74,7 @@ function App() {
     event.preventDefault();
 
     setIsRegister((currentMode) => !currentMode);
-    setFullName("");
-    setAcceptTerms(false);
-    clearPasswordFields();
+    clearForm();
   };
 
   return (
@@ -152,7 +144,7 @@ function App() {
             />
           </div>
 
-          <div className={isRegister ? "password-row" : ""}>
+          <div className={isRegister ? "password-row" : "password-single"}>
             <div className="form-group">
               <label htmlFor="password">كلمة المرور</label>
 
@@ -218,11 +210,7 @@ function App() {
             </label>
           )}
 
-          {error && (
-            <p className="error register-error">
-              {error}
-            </p>
-          )}
+          {error && <p className="error">{error}</p>}
 
           <button className="login-button" type="submit">
             {isRegister ? "إنشاء الحساب" : "تسجيل الدخول"}
