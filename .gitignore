@@ -1,0 +1,7 @@
+# Ignore app build artifacts and dependencies
+app/node_modules/
+app/dist/
+app/.vite/
+app/tsconfig.tsbuildinfo
+app/src/*.js
+app/src/*.js.map

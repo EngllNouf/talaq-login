@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import "./App.css";
 
 function App() {
