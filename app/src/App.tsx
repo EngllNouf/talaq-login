@@ -1,22 +1,50 @@
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import "./App.css";
 
 function App() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
 
-    if (!email.trim() || !password.trim()) {
-      setError("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+    if (
+      !fullName.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmPassword.trim()
+    ) {
+      setError("يرجى تعبئة جميع الحقول");
       return;
     }
 
-    alert("تم تسجيل الدخول بنجاح");
+    if (password.length < 8) {
+      setError("يجب أن تتكون كلمة المرور من 8 أحرف على الأقل");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("كلمتا المرور غير متطابقتين");
+      return;
+    }
+
+    if (!acceptTerms) {
+      setError("يرجى الموافقة على الشروط والأحكام");
+      return;
+    }
+
+    alert("تم إنشاء الحساب بنجاح");
+
+    console.log({
+      fullName,
+      email,
+      password,
+    });
   };
 
   return (
@@ -25,7 +53,7 @@ function App() {
       <div className="decor decor-two" />
       <div className="decor decor-three" />
 
-      <section className="login-card">
+      <section className="login-card register-card">
         <div className="brand">
           <div className="brand-symbol">
             <span />
@@ -40,12 +68,25 @@ function App() {
         </div>
 
         <div className="heading">
-          <p className="welcome">أهلًا بك في تلاقي</p>
-          <h1>تسجيل الدخول</h1>
+          <p className="welcome">انضم إلى مجتمع تلاقي</p>
+          <h1>إنشاء حساب</h1>
           <p>حيث تلتقي العقول لتصنع الفرق</p>
         </div>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
+          <div className="form-group">
+            <label htmlFor="fullName">الاسم الكامل</label>
+
+            <input
+              id="fullName"
+              type="text"
+              value={fullName}
+              placeholder="أدخل اسمك الكامل"
+              autoComplete="name"
+              onChange={(event) => setFullName(event.target.value)}
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="email">البريد الإلكتروني</label>
 
@@ -59,47 +100,58 @@ function App() {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">كلمة المرور</label>
+          <div className="password-row">
+            <div className="form-group">
+              <label htmlFor="password">كلمة المرور</label>
 
-            <div className="password-field">
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                type="password"
                 value={password}
-                placeholder="أدخل كلمة المرور"
-                autoComplete="current-password"
+                placeholder="8 أحرف على الأقل"
+                autoComplete="new-password"
                 onChange={(event) => setPassword(event.target.value)}
               />
+            </div>
 
-              <button
-                type="button"
-                className="show-password"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "إخفاء" : "إظهار"}
-              </button>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">تأكيد كلمة المرور</label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                placeholder="أعد كتابة كلمة المرور"
+                autoComplete="new-password"
+                onChange={(event) =>
+                  setConfirmPassword(event.target.value)
+                }
+              />
             </div>
           </div>
 
-          <div className="form-options">
-            <label className="remember-me">
-              <input type="checkbox" />
-              <span>تذكرني</span>
-            </label>
+          <label className="terms">
+            <input
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={(event) => setAcceptTerms(event.target.checked)}
+            />
 
-            <a href="#">نسيت كلمة المرور؟</a>
-          </div>
+            <span>
+              أوافق على <a href="#">الشروط والأحكام</a> و
+              <a href="#"> سياسة الخصوصية</a>
+            </span>
+          </label>
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error register-error">{error}</p>}
 
           <button className="login-button" type="submit">
-            تسجيل الدخول
+            إنشاء الحساب
           </button>
         </form>
 
         <p className="footer-text">
-          لا تملك حسابًا؟ <a href="#">إنشاء حساب</a>
+          لديك حساب بالفعل؟ <a href="#">تسجيل الدخول</a>
         </p>
       </section>
 

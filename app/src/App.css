@@ -322,3 +322,43 @@ a:hover {
     font-size: 24px;
   }
 }
+
+.register-card {
+  max-width: 560px;
+}
+
+.password-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 2px 0 22px;
+  color: #59625a;
+  font-size: 11px;
+  line-height: 2;
+  cursor: pointer;
+}
+
+.terms input {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin-top: 4px;
+  accent-color: var(--orange);
+}
+
+.register-error {
+  margin-top: -8px;
+}
+
+@media (max-width: 520px) {
+  .password-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
