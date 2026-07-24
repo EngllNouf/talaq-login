@@ -1,0 +1,6 @@
+/* Minimal styles for layout */
+.login-page { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.login-card { background:white; padding:2rem; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.08); width:360px }
+.brand-name { font-weight:700; margin-bottom:1rem }
+.form-group { margin-bottom:1rem }
+.error { color:#c00 }
