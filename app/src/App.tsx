@@ -2,13 +2,20 @@ import { type FormEvent, type MouseEvent, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [isRegister, setIsRegister] = useState(true);
+  const [isRegister, setIsRegister] = useState(false);
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState("");
+
+  const clearPasswordFields = () => {
+    setPassword("");
+    setConfirmPassword("");
+    setError("");
+  };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,18 +47,42 @@ function App() {
         return;
       }
 
-      alert("تم إنشاء الحساب بنجاح");
-      console.log({ fullName, email, password });
-    } else {
-      alert("تم تسجيل الدخول بنجاح");
-      console.log({ email, password });
+      console.log({
+        fullName,
+        email,
+        password,
+      });
+
+      alert("تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول");
+
+      // الانتقال إلى صفحة تسجيل الدخول
+      setIsRegister(false);
+
+      // تنظيف بيانات التسجيل مع الاحتفاظ بالإيميل
+      setFullName("");
+      setPassword("");
+      setConfirmPassword("");
+      setAcceptTerms(false);
+      setError("");
+
+      return;
     }
+
+    console.log({
+      email,
+      password,
+    });
+
+    alert("تم تسجيل الدخول بنجاح");
   };
 
   const toggleMode = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    setError("");
-    setIsRegister(!isRegister);
+
+    setIsRegister((currentMode) => !currentMode);
+    setFullName("");
+    setAcceptTerms(false);
+    clearPasswordFields();
   };
 
   return (
@@ -60,7 +91,11 @@ function App() {
       <div className="decor decor-two" />
       <div className="decor decor-three" />
 
-      <section className="login-card register-card">
+      <section
+        className={`login-card ${
+          isRegister ? "register-card" : "login-mode-card"
+        }`}
+      >
         <div className="brand">
           <div className="brand-symbol">
             <span />
@@ -78,7 +113,9 @@ function App() {
           <p className="welcome">
             {isRegister ? "انضم إلى مجتمع تلاقي" : "أهلًا بعودتك"}
           </p>
+
           <h1>{isRegister ? "إنشاء حساب" : "تسجيل الدخول"}</h1>
+
           <p>
             {isRegister
               ? "حيث تلتقي العقول لتصنع الفرق"
@@ -115,7 +152,7 @@ function App() {
             />
           </div>
 
-          <div className="password-row">
+          <div className={isRegister ? "password-row" : ""}>
             <div className="form-group">
               <label htmlFor="password">كلمة المرور</label>
 
@@ -123,15 +160,21 @@ function App() {
                 id="password"
                 type="password"
                 value={password}
-                placeholder={isRegister ? "8 أحرف على الأقل" : "أدخل كلمة المرور"}
-                autoComplete={isRegister ? "new-password" : "current-password"}
+                placeholder={
+                  isRegister ? "8 أحرف على الأقل" : "أدخل كلمة المرور"
+                }
+                autoComplete={
+                  isRegister ? "new-password" : "current-password"
+                }
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
 
             {isRegister && (
               <div className="form-group">
-                <label htmlFor="confirmPassword">تأكيد كلمة المرور</label>
+                <label htmlFor="confirmPassword">
+                  تأكيد كلمة المرور
+                </label>
 
                 <input
                   id="confirmPassword"
@@ -139,18 +182,33 @@ function App() {
                   value={confirmPassword}
                   placeholder="أعد كتابة كلمة المرور"
                   autoComplete="new-password"
-                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  onChange={(event) =>
+                    setConfirmPassword(event.target.value)
+                  }
                 />
               </div>
             )}
           </div>
+
+          {!isRegister && (
+            <div className="form-options">
+              <label className="remember-me">
+                <input type="checkbox" />
+                <span>تذكرني</span>
+              </label>
+
+              <a href="#">نسيت كلمة المرور؟</a>
+            </div>
+          )}
 
           {isRegister && (
             <label className="terms">
               <input
                 type="checkbox"
                 checked={acceptTerms}
-                onChange={(event) => setAcceptTerms(event.target.checked)}
+                onChange={(event) =>
+                  setAcceptTerms(event.target.checked)
+                }
               />
 
               <span>
@@ -160,7 +218,11 @@ function App() {
             </label>
           )}
 
-          {error && <p className="error register-error">{error}</p>}
+          {error && (
+            <p className="error register-error">
+              {error}
+            </p>
+          )}
 
           <button className="login-button" type="submit">
             {isRegister ? "إنشاء الحساب" : "تسجيل الدخول"}
@@ -168,7 +230,10 @@ function App() {
         </form>
 
         <p className="footer-text">
-          {isRegister ? "لديك حساب بالفعل؟ " : "لا تملك حسابًا؟ "}
+          {isRegister
+            ? "لديك حساب بالفعل؟ "
+            : "لا تملك حسابًا؟ "}
+
           <a href="#" onClick={toggleMode}>
             {isRegister ? "تسجيل الدخول" : "إنشاء حساب"}
           </a>
